@@ -1,11 +1,20 @@
 
+
 public class JustToTest {
 
+	
 	public static void main(String[] args) {
 		javaHungrymethod();
 
 	}
 	
+	
+	public JustToTest() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
 	public static int javaHungrymethod(){
 		try{
 			System.out.println("try");

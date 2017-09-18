@@ -1,5 +1,7 @@
 package GeekForGeeksDsAndAlgo.LinkedListPrograms;
 
+import java.util.HashSet;
+
 import sun.util.resources.cldr.ur.CurrencyNames_ur;
 
 public class LinkedList {
@@ -323,6 +325,150 @@ public class LinkedList {
 		return 0;
 	}
 	
+	//function to print reverse of linked list
+	void printReverse(Node node){
+		if(node == null)
+			return;
+		
+		//print list of head node
+		printReverse(node.next);
+		
+		//after everything is printed
+		System.out.println(node.data+ " ");
+	}
+	
+	void removeDuplicatesInSortedList(){
+		Node current = head;
+		
+		//pointer to store the next pointer of a node to be deleted;
+		Node next_next;
+		
+		//do nothing if the list is empty
+		if(head==null)
+			return;
+		
+		//traverse list till the last node node
+		while(current.next!=null){
+			
+			//compare current node with next node
+			if(current.data == current.next.data){
+				current.next = current.next.next;
+			}else{
+				current = current.next;
+			}
+		}
+		
+	}
+	
+	static void removeDuplicateInUnsortedListUsingHashing(Node node){
+		HashSet<Integer> hashSet = new HashSet<>();
+		
+		//pick element one by one
+		Node current = node;
+		Node prev = null;
+		while(current!=null){
+			int currentvalue = current.data;
+			
+			//if current value is seen before 
+			if(hashSet.contains(currentvalue)){
+				prev.next = current.next;
+			}else{
+				hashSet.add(currentvalue);
+				prev = current;
+			}
+			current = current.next;
+				
+			
+		}
+	}
+	
+	void pairwiseSwapIterativeWay(){
+		Node temp = head;
+		
+		//traverse only till there are atleast 2 nodes left
+		while(temp!=null && temp.next!=null){
+			//swap thedata
+			int k = temp.data;
+			temp.data = temp.next.data;
+			temp.next.data =k;
+			temp = temp.next.next;
+		}
+	}
+	
+	//recursive function to pairwise swap elements of a linked list
+	void pairWiseSwapRecursive(Node node){
+		
+		//there must be at least two nodes in the list
+		if(node!=null && node.next!=null){
+			
+			int k = node.data;
+			node.data = node.next.data;
+			node.next.data =k;
+			
+			pairWiseSwapRecursive(node.next.next);
+			
+		}
+	}
+	
+	void moveToFront(){
+		
+		//if linked list is empty or it contains only
+		//one node then simply return;
+		if(head==null||head.next==null)
+			return;
+		
+		//initialize second last and last pointer;
+		Node secLast = null;
+		Node last = head;
+		
+		while(last.next!=null){
+			secLast = last;
+			last = last.next;
+		}
+		secLast.next = null;
+		last.next = head;
+		head = last;
+	}
+	
+	void deleteAlternativeIterative() {
+		if (head == null)
+			return;
+
+		Node prev = head;
+		Node current = head.next;
+		while (prev != null && current != null) {
+
+			// change next link of previous node
+			prev.next = current.next;
+
+			// free node
+			current = null;
+
+			// update previous and current
+			prev = prev.next;
+			if (prev != null) {
+				current = prev.next;
+			}
+
+		}
+	}
+	
+	void deleteAlternativeRecursive(Node head) {
+		if (head == null) {
+			return;
+		}
+		Node node = head.next;
+		if (node == null) {
+			return;
+		}
+
+		head.next = node.next;
+
+		deleteAlternativeRecursive(head.next);
+
+	}
+	
+	
 	public static void main(String[] args) {
 		LinkedList list = new LinkedList();
 		list.head = new Node(1);
@@ -342,7 +488,10 @@ public class LinkedList {
 		
 		System.out.println("Printing complete linked list----------");
 		list.printList();
-	
+
+		System.out.println("Printing complete linked list after deleting alternative Recursive----------");
+		list.deleteAlternativeRecursive(list.head);
+		list.printList();
 	
 /*		System.out.println("Count using iteration----------");
 		System.out.println(list.getCountIterative(list.head));
@@ -355,6 +504,14 @@ public class LinkedList {
 		list.head = list.reverseUsingIteration(list.head);
 		System.out.println("Printing After reverse linked list----------");
 		list.printList();
+	
+	System.out.println("Printing complete linked list after making last as first----------");
+		list.moveToFront();
+		list.printList();
+		
+		System.out.println("Printing complete linked list after swap----------");
+		list.pairwiseSwapIterativeWay();
+		list.printList();
 		
 		System.out.println("Detect loop in linked list----------");
 		list.detectLoop(list.head);
@@ -363,8 +520,19 @@ public class LinkedList {
 		System.out.println("Printing After reverse linked list----------");
 		list.printList();
 		
+		System.out.println("Printing complete linked list after swap----------");
+		list.pairWiseSwapRecursive(list.head);
+		list.printList();
 		
 		System.out.println("Printing complete linked list----------");
+		list.printList();
+		
+		System.out.println("Printing  linked list After removing duplicates----------");
+		list.removeDuplicatesInSortedList();
+		list.printList();
+		
+		System.out.println("Printing  linked list After removing duplicates----------");
+		list.removeDuplicateInUnsortedListUsingHashing(list.head);
 		list.printList();
 		
 		System.out.println("Printing nth from last using length of linked list------------");
@@ -385,6 +553,10 @@ public class LinkedList {
 	    System.out.println("\n Linked list after calling swapNodes() ");
 	    list.printList();
 	    
+	    		System.out.println("Printing complete linked list after deleting alternative Iterative----------");
+		list.deleteAlternativeIterative();
+		list.printList();
+	    
 		System.out.println("Insert After----------");
 		list.addAfter(2, 5);
 		list.printList();
@@ -400,7 +572,11 @@ public class LinkedList {
 //		System.out.println("deleting a purticular Node----------");
 //		list.deleteNode(3);
 //		list.printList();
- * 
+
+
+		System.out.println("Printing reverse of linked list----------");
+		list.printReverse(list.head);
+		
 		System.out.println("deleting a purticular position----------");
 		list.deleteNodeAtGivenPosition(4);
 		list.printList();*/
